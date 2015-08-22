@@ -328,11 +328,11 @@ module.exports = function(config) {
                         }
                     },
                     'bemhtml-dev' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        tech : 'enb-bemxjst/techs/bemhtml',
                         options : { devMode : true }
                     },
                     'bemhtml-prod' : {
-                        tech : 'enb-bemxjst/techs/bemhtml-old',
+                        tech : 'enb-bemxjst/techs/bemhtml',
                         options : { devMode : false }
                     },
                     'bemhtml@bem-xjst-4' : {
