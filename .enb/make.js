@@ -5,6 +5,10 @@ var LIB_NAME = 'bem-components',
     path = require('path'),
     naming = require('bem-naming'),
     techs = require('./techs'),
+    bhOptions = {
+        jsAttrName : 'data-bem',
+        jsAttrScheme : 'json',
+    },
     PLATFORMS = {
         'desktop' : ['common', 'desktop'],
         'touch-phone' : ['common', 'touch'],
@@ -101,8 +105,12 @@ module.exports = function(config) {
                         target : LIB_NAME + '.dev.js'
                     }],
                     [techs.engines.bemhtml, { target : LIB_NAME + '.dev.bemhtml.js', devMode : false }],
-                    [techs.engines.bhBundle, { target : LIB_NAME + '.dev.bh.js', mimic : ['bh', 'BEMHTML'] }],
-                    [techs.engines.bhBundle, { target : '.tmp.browser.bh.js', mimic : ['bh', 'BEMHTML'] }],
+                    [techs.engines.bhBundle, {
+                        target : LIB_NAME + '.dev.bh.js', mimic : ['bh', 'BEMHTML'], bhOptions : bhOptions
+                    }],
+                    [techs.engines.bhBundle, {
+                        target : '.tmp.browser.bh.js', mimic : ['bh', 'BEMHTML'], bhOptions : bhOptions
+                    }],
                     [techs.files.merge, {
                         target : LIB_NAME + '.dev.js+bemhtml.js',
                         sources : [LIB_NAME + '.dev.js', LIB_NAME + '.dev.bemhtml.js']
@@ -218,7 +226,8 @@ module.exports = function(config) {
                 BEM_TEMPLATE_ENGINE === 'BH'? [techs.engines.bhBundle, {
                     target : '?.browser.bh.js',
                     filesTarget : '?.template.files',
-                    mimic : 'BEMHTML'
+                    mimic : 'BEMHTML',
+                    bhOptions : bhOptions
                 }] : [techs.engines.bemhtml, {
                     target : '?.browser.bemhtml.js',
                     filesTarget : '?.template.files',
@@ -228,7 +237,7 @@ module.exports = function(config) {
 
             // Build htmls
             nodeConfig.addTechs(BEM_TEMPLATE_ENGINE === 'BH'? [
-                [techs.engines.bhCommonJS],
+                [techs.engines.bhCommonJS, { bhOptions : bhOptions }],
                 [techs.html.bh]
             ] : [
                 [techs.engines.bemhtml, { devMode : false }],
@@ -434,7 +443,7 @@ function wrapInPage(bemjson, meta) {
         title : naming.stringify(meta.notation),
         head : [{ elem : 'css', url : basename + '.css' }],
         scripts : [{ elem : 'js', url : basename + '.js' }],
-        mods : { theme : getThemeFromBemjson(bemjson) },
+        mgods : { theme : getThemeFromBemjson(bemjson) },
         content : bemjson
     };
 }
